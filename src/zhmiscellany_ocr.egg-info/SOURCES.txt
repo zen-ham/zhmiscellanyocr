@@ -4,6 +4,7 @@ pyproject.toml
 setup.cfg
 src/zhmiscellany-ocr/__init__.py
 src/zhmiscellany-ocr/_ocr_supportfuncs.py
+src/zhmiscellany-ocr/_py_resources.py
 src/zhmiscellany_ocr.egg-info/PKG-INFO
 src/zhmiscellany_ocr.egg-info/SOURCES.txt
 src/zhmiscellany_ocr.egg-info/dependency_links.txt
