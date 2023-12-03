@@ -62,7 +62,7 @@ def ocr(image):
             #print_str_if(f'succeeded {image_path}', _batch_ocr_use_console)
             return text
         except Exception as e:
-            raise f'\nFailed to run OCR on file {image}\n\n{e}\n'
+            raise Exception(f'\nFailed to run OCR on file {image}\n\n{e}\n')
     else:
         return pytesseract.image_to_string(image)
 
