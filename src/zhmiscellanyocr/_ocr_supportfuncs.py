@@ -50,16 +50,17 @@ def set_tesseract_path():
     pytesseract.pytesseract.tesseract_cmd = f'{tesseract_path}\\tesseract.exe'
 
 
-def ocr(image):
+def ocr(image, config=None):
+    if config is None:
+        config = ''
     if type(image) == str:
         try:
             if '.ico' in image:
                 ico_file = Image.open(image)
                 png_file = ico_file.convert("RGBA")
-                text = pytesseract.image_to_string(png_file)
+                text = pytesseract.image_to_string(png_file, config=config)
             else:
-                text = pytesseract.image_to_string(Image.open(image))
-            #print_str_if(f'succeeded {image_path}', _batch_ocr_use_console)
+                text = pytesseract.image_to_string(Image.open(image), config=config)
             return text
         except Exception as e:
             raise Exception(f'\nFailed to run OCR on file {image}\n\n{e}\n')
@@ -67,15 +68,17 @@ def ocr(image):
         return pytesseract.image_to_string(image)
 
 
-def s_ocr(image, _batch_ocr_use_console):
+def s_ocr(image, _batch_ocr_use_console, config):
+    if config is None:
+        config = ''
     if type(image) == str:
         try:
             if '.ico' in image:
                 ico_file = Image.open(image)
                 png_file = ico_file.convert("RGBA")
-                text = pytesseract.image_to_string(png_file)
+                text = pytesseract.image_to_string(png_file, config=config)
             else:
-                text = pytesseract.image_to_string(Image.open(image))
+                text = pytesseract.image_to_string(Image.open(image), config=config)
             print_str_if(f'succeeded {image}', _batch_ocr_use_console)
             return text
         except Exception as e:
@@ -85,11 +88,11 @@ def s_ocr(image, _batch_ocr_use_console):
         return pytesseract.image_to_string(image)
 
 
-def l_ocr(image, thread_string, pos, _batch_ocr_use_console):
+def l_ocr(image, thread_string, pos, _batch_ocr_use_console, config):
     if type(image) == str:
-        _batch_ocr_cache_dict[thread_string][image] = s_ocr(image, _batch_ocr_use_console)
+        _batch_ocr_cache_dict[thread_string][image] = s_ocr(image, _batch_ocr_use_console, config)
     else:
-        _batch_ocr_cache_dict[thread_string][pos] = s_ocr(image, _batch_ocr_use_console)
+        _batch_ocr_cache_dict[thread_string][pos] = s_ocr(image, _batch_ocr_use_console, config)
 
 
 _batch_ocr_cache_dict = {}
@@ -97,7 +100,7 @@ _ocr_thread_group = zhmiscellany.string.get_universally_unique_string()
 set_tesseract_path()
 
 
-def batch_ocr(images, threads=10, prints=False):
+def batch_ocr(images, threads=10, config=None, prints=False):
     global _batch_ocr_cache_dict
     _batch_ocr_use_console = prints
     thread_string = zhmiscellany.string.get_universally_unique_string()
@@ -107,7 +110,7 @@ def batch_ocr(images, threads=10, prints=False):
         while count_threads_by_string(_ocr_thread_group) < threads:
             image = l_images.pop()
             pos = len(l_images)
-            threading.Thread(target=l_ocr, args=(image, thread_string, pos, _batch_ocr_use_console), name=f'{_ocr_thread_group}_{thread_string}_{zhmiscellany.string.get_universally_unique_string()}').start()
+            threading.Thread(target=l_ocr, args=(image, thread_string, pos, _batch_ocr_use_console, config), name=f'{_ocr_thread_group}_{thread_string}_{zhmiscellany.string.get_universally_unique_string()}').start()
             if len(l_images) < 1:
                 break
         time.sleep(0.1)
