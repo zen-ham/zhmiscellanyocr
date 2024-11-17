@@ -31,7 +31,7 @@ Documentation:
 `zhmiscellanyocr.ocr()`
 ---
 
-`zhmiscellanyocr.ocr(image)`
+`zhmiscellanyocr.ocr(image, config=None)`
 
 Takes an image path or a PIL image object and runs local image text recognition and returns the text in the image. Does not use the internet to function.
 
@@ -40,7 +40,7 @@ Takes an image path or a PIL image object and runs local image text recognition 
 `zhmiscellanyocr.batch_ocr()`
 ---
 
-`zhmiscellanyocr.batch_ocr(images, threads=10, prints=False)`
+`zhmiscellanyocr.batch_ocr(images, threads=10, config=None)`
 
 Takes a list of image paths or PIL image objects and concurrently runs local image text recognition and returns the text in the image. Does not use the internet to function.
 
