@@ -35,6 +35,7 @@ def set_tesseract_path():
         os.chdir(cwd)
     tesseract_path = os.path.join(base_path, 'resources', 'tesseract')
     pytesseract.pytesseract.tesseract_cmd = f'{tesseract_path}\\tesseract.exe'
+    return pytesseract.pytesseract.tesseract_cmd
 
 
 def ocr(image, config=None):
@@ -55,7 +56,7 @@ def ocr(image, config=None):
         return pytesseract.image_to_string(image, config=config)
 
 
-set_tesseract_path()
+ptpath = set_tesseract_path()
 
 
 def batch_ocr(images, threads=10, config=None):
